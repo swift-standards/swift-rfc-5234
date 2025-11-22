@@ -2,6 +2,11 @@
 // swift-rfc-5234
 //
 // RFC 5234 Appendix B.1 Core Rules
+//
+// These core rules delegate to INCITS-4-1986 for character classification
+// rather than reimplementing ASCII character classes.
+
+import INCITS_4_1986
 
 extension RFC_5234 {
     /// Core ABNF rules defined in RFC 5234 Appendix B.1
@@ -46,6 +51,8 @@ extension RFC_5234.CoreRules {
     /// ALPHA = %x41-5A / %x61-7A  ; A-Z / a-z
     ///
     /// Matches any ASCII alphabetic character (upper or lowercase).
+    ///
+    /// Equivalent to INCITS_4_1986.CharacterClassification.isLetter(_:)
     public static let ALPHA = RFC_5234.Rule(
         name: "ALPHA",
         element: .alternation([
@@ -57,6 +64,8 @@ extension RFC_5234.CoreRules {
     /// DIGIT = %x30-39  ; 0-9
     ///
     /// Matches any ASCII digit.
+    ///
+    /// Equivalent to INCITS_4_1986.CharacterClassification.isDigit(_:)
     public static let DIGIT = RFC_5234.Rule(
         name: "DIGIT",
         element: .terminal(.byteRange(0x30, 0x39))
@@ -66,6 +75,8 @@ extension RFC_5234.CoreRules {
     ///
     /// Matches any hexadecimal digit (0-9, A-F).
     /// Note: Case-insensitive, so also matches a-f.
+    ///
+    /// Equivalent to INCITS_4_1986.CharacterClassification.isHexDigit(_:)
     public static let HEXDIG = RFC_5234.Rule(
         name: "HEXDIG",
         element: .alternation([
@@ -97,54 +108,60 @@ extension RFC_5234.CoreRules {
     /// SP = %x20  ; space
     ///
     /// Matches a space character.
+    /// Uses INCITS-4-1986 SPACE.sp constant.
     public static let SP = RFC_5234.Rule(
         name: "SP",
-        element: .terminal(.byte(0x20))
+        element: .terminal(.byte(INCITS_4_1986.SPACE.sp))
     )
 
     /// HTAB = %x09  ; horizontal tab
     ///
     /// Matches a horizontal tab character.
+    /// Uses INCITS-4-1986 ControlCharacters.htab constant.
     public static let HTAB = RFC_5234.Rule(
         name: "HTAB",
-        element: .terminal(.byte(0x09))
+        element: .terminal(.byte(INCITS_4_1986.ControlCharacters.htab))
     )
 
     /// CR = %x0D  ; carriage return
     ///
     /// Matches a carriage return character.
+    /// Uses INCITS-4-1986 ControlCharacters.cr constant.
     public static let CR = RFC_5234.Rule(
         name: "CR",
-        element: .terminal(.byte(0x0D))
+        element: .terminal(.byte(INCITS_4_1986.ControlCharacters.cr))
     )
 
     /// LF = %x0A  ; linefeed
     ///
     /// Matches a linefeed character.
+    /// Uses INCITS-4-1986 ControlCharacters.lf constant.
     public static let LF = RFC_5234.Rule(
         name: "LF",
-        element: .terminal(.byte(0x0A))
+        element: .terminal(.byte(INCITS_4_1986.ControlCharacters.lf))
     )
 
     /// CRLF = CR LF  ; Internet newline
     ///
     /// Matches the standard internet newline sequence.
+    /// Uses INCITS-4-1986 ControlCharacters.crlf constant.
     public static let CRLF = RFC_5234.Rule(
         name: "CRLF",
         element: .sequence([
-            .terminal(.byte(0x0D)),  // CR
-            .terminal(.byte(0x0A))   // LF
+            .terminal(.byte(INCITS_4_1986.ControlCharacters.cr)),
+            .terminal(.byte(INCITS_4_1986.ControlCharacters.lf))
         ])
     )
 
     /// WSP = SP / HTAB  ; whitespace
     ///
     /// Matches either a space or horizontal tab.
+    /// Note: INCITS whitespace includes CR/LF, but RFC 5234 WSP is only SP/HTAB.
     public static let WSP = RFC_5234.Rule(
         name: "WSP",
         element: .alternation([
-            .terminal(.byte(0x20)),  // SP
-            .terminal(.byte(0x09))   // HTAB
+            .terminal(.byte(INCITS_4_1986.SPACE.sp)),
+            .terminal(.byte(INCITS_4_1986.ControlCharacters.htab))
         ])
     )
 }
@@ -155,9 +172,10 @@ extension RFC_5234.CoreRules {
     /// DQUOTE = %x22  ; " (double quote)
     ///
     /// Matches a double quote character.
+    /// Uses INCITS-4-1986 GraphicCharacters.quotationMark constant.
     public static let DQUOTE = RFC_5234.Rule(
         name: "DQUOTE",
-        element: .terminal(.byte(0x22))
+        element: .terminal(.byte(INCITS_4_1986.GraphicCharacters.quotationMark))
     )
 }
 
@@ -167,6 +185,8 @@ extension RFC_5234.CoreRules {
     /// VCHAR = %x21-7E  ; visible (printing) characters
     ///
     /// Matches any visible ASCII character.
+    ///
+    /// Equivalent to INCITS_4_1986.CharacterClassification.isVisible(_:)
     public static let VCHAR = RFC_5234.Rule(
         name: "VCHAR",
         element: .terminal(.byteRange(0x21, 0x7E))
@@ -175,6 +195,9 @@ extension RFC_5234.CoreRules {
     /// CHAR = %x01-7F  ; any 7-bit ASCII character, excluding NUL
     ///
     /// Matches any 7-bit ASCII character except NUL (0x00).
+    ///
+    /// Note: INCITS-4-1986 doesn't define CHAR, but it's equivalent to:
+    /// `byte != 0 && byte < 0x80`
     public static let CHAR = RFC_5234.Rule(
         name: "CHAR",
         element: .terminal(.byteRange(0x01, 0x7F))
@@ -183,6 +206,8 @@ extension RFC_5234.CoreRules {
     /// CTL = %x00-1F / %x7F  ; controls
     ///
     /// Matches any ASCII control character.
+    ///
+    /// Equivalent to INCITS_4_1986.CharacterClassification.isControl(_:)
     public static let CTL = RFC_5234.Rule(
         name: "CTL",
         element: .alternation([
@@ -194,6 +219,8 @@ extension RFC_5234.CoreRules {
     /// OCTET = %x00-FF  ; 8 bits of data
     ///
     /// Matches any byte value.
+    ///
+    /// Note: Any UInt8 is a valid OCTET.
     public static let OCTET = RFC_5234.Rule(
         name: "OCTET",
         element: .terminal(.byteRange(0x00, 0xFF))

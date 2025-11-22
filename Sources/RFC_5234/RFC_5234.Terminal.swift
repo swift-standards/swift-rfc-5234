@@ -36,7 +36,9 @@ extension RFC_5234 {
         /// This method enables RFC 7405 %s"..." syntax for exact string matching.
         /// Unlike the default case-insensitive matching, this matches only the exact case.
         ///
+        /// - Note: This is an SPI for RFC 7405. Use RFC_7405 package for case-sensitive strings.
         /// - Parameter string: The string to match (case-sensitive)
+        @_spi(RFC_7405)
         public static func caseSensitiveString(_ string: String) -> Self {
             Self(matcher: .string(string, caseSensitive: true))
         }
