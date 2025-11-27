@@ -13,10 +13,10 @@ extension RFC_5234 {
         ) throws {
             let (matched, consumed) = try matchElement(rule.element, in: bytes, at: 0)
             guard matched else {
-                throw ValidationError.doesNotMatch(rule.name)
+                throw Error.doesNotMatch(rule.name)
             }
             guard consumed == bytes.count else {
-                throw ValidationError.incompleteMatch(
+                throw Error.incompleteMatch(
                     rule.name,
                     consumed: consumed,
                     total: bytes.count
@@ -87,12 +87,12 @@ extension RFC_5234 {
                 return (count >= min, totalConsumed)
 
             case .ruleReference:
-                throw ValidationError.unsupportedFeature("Rule references not yet implemented")
+                throw Error.unsupportedFeature("Rule references not yet implemented")
             }
         }
 
         /// Errors that can occur during validation.
-        public enum ValidationError: Error, Sendable {
+        public enum Error: Swift.Error, Sendable {
             case doesNotMatch(String)
             case incompleteMatch(String, consumed: Int, total: Int)
             case unsupportedFeature(String)
