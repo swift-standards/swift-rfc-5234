@@ -57,7 +57,7 @@ extension RFC_5234.CoreRules {
         name: "ALPHA",
         element: .alternation([
             .terminal(.byteRange(0x41, 0x5A)),  // A-Z
-            .terminal(.byteRange(0x61, 0x7A))   // a-z
+            .terminal(.byteRange(0x61, 0x7A)),  // a-z
         ])
     )
 
@@ -86,7 +86,7 @@ extension RFC_5234.CoreRules {
             .terminal(.string("C")),
             .terminal(.string("D")),
             .terminal(.string("E")),
-            .terminal(.string("F"))
+            .terminal(.string("F")),
         ])
     )
 
@@ -97,7 +97,7 @@ extension RFC_5234.CoreRules {
         name: "BIT",
         element: .alternation([
             .terminal(.byte(0x30)),  // "0"
-            .terminal(.byte(0x31))   // "1"
+            .terminal(.byte(0x31)),  // "1"
         ])
     )
 }
@@ -149,7 +149,7 @@ extension RFC_5234.CoreRules {
         name: "CRLF",
         element: .sequence([
             .terminal(.byte(INCITS_4_1986.ControlCharacters.cr)),
-            .terminal(.byte(INCITS_4_1986.ControlCharacters.lf))
+            .terminal(.byte(INCITS_4_1986.ControlCharacters.lf)),
         ])
     )
 
@@ -161,7 +161,7 @@ extension RFC_5234.CoreRules {
         name: "WSP",
         element: .alternation([
             .terminal(.byte(INCITS_4_1986.SPACE.sp)),
-            .terminal(.byte(INCITS_4_1986.ControlCharacters.htab))
+            .terminal(.byte(INCITS_4_1986.ControlCharacters.htab)),
         ])
     )
 }
@@ -212,7 +212,7 @@ extension RFC_5234.CoreRules {
         name: "CTL",
         element: .alternation([
             .terminal(.byteRange(0x00, 0x1F)),
-            .terminal(.byte(0x7F))
+            .terminal(.byte(0x7F)),
         ])
     )
 
@@ -248,6 +248,6 @@ extension RFC_5234.CoreRules {
         "VCHAR": vchar,
         "CHAR": char,
         "CTL": ctl,
-        "OCTET": octet
+        "OCTET": octet,
     ]
 }

@@ -8,10 +8,10 @@ extension RFC_5234 {
     /// - Literal text strings (case-insensitive by default)
     /// - Numeric values (byte ranges)
     /// - Character ranges
-    public struct Terminal: Hashable, Sendable {
+    public struct Terminal: Hashable, Sendable, Codable {
         private let matcher: Matcher
 
-        private enum Matcher: Hashable, Sendable {
+        private enum Matcher: Hashable, Sendable, Codable {
             case string(String, caseSensitive: Bool)
             case byteValue(UInt8)
             case byteRange(UInt8, UInt8)
@@ -65,7 +65,7 @@ extension RFC_5234 {
         /// - Returns: `true` if the bytes match, `false` otherwise
         public func matches(_ bytes: [UInt8]) -> Bool {
             switch matcher {
-            case let .string(string, caseSensitive):
+            case .string(let string, let caseSensitive):
                 let stringBytes = Array(string.utf8)
                 guard bytes.count == stringBytes.count else { return false }
                 if caseSensitive {
@@ -73,15 +73,18 @@ extension RFC_5234 {
                 } else {
                     return zip(bytes, stringBytes).allSatisfy { byte, expected in
                         let lower = INCITS_4_1986.CaseConversion.convert(byte, to: .lower)
-                        let expectedLower = INCITS_4_1986.CaseConversion.convert(expected, to: .lower)
+                        let expectedLower = INCITS_4_1986.CaseConversion.convert(
+                            expected,
+                            to: .lower
+                        )
                         return lower == expectedLower
                     }
                 }
 
-            case let .byteValue(value):
+            case .byteValue(let value):
                 return bytes.count == 1 && bytes[0] == value
 
-            case let .byteRange(lower, upper):
+            case .byteRange(let lower, let upper):
                 return bytes.count == 1 && bytes[0] >= lower && bytes[0] <= upper
             }
         }

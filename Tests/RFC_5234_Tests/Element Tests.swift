@@ -15,7 +15,7 @@ struct ElementSequenceTests {
             name: "test",
             element: .sequence([
                 .terminal(.byte(0x41)),  // A
-                .terminal(.byte(0x42))   // B
+                .terminal(.byte(0x42)),  // B
             ])
         )
 
@@ -28,11 +28,11 @@ struct ElementSequenceTests {
             name: "test",
             element: .sequence([
                 .terminal(.byte(0x41)),  // A
-                .terminal(.byte(0x42))   // B
+                .terminal(.byte(0x42)),  // B
             ])
         )
 
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x41], against: rule)  // Only "A"
         }
     }
@@ -43,11 +43,11 @@ struct ElementSequenceTests {
             name: "test",
             element: .sequence([
                 .terminal(.byte(0x41)),  // A
-                .terminal(.byte(0x42))   // B
+                .terminal(.byte(0x42)),  // B
             ])
         )
 
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x42, 0x41], against: rule)  // "BA"
         }
     }
@@ -72,7 +72,7 @@ struct ElementAlternationTests {
             name: "test",
             element: .alternation([
                 .terminal(.byte(0x41)),  // A
-                .terminal(.byte(0x42))   // B
+                .terminal(.byte(0x42)),  // B
             ])
         )
 
@@ -85,7 +85,7 @@ struct ElementAlternationTests {
             name: "test",
             element: .alternation([
                 .terminal(.byte(0x41)),  // A
-                .terminal(.byte(0x42))   // B
+                .terminal(.byte(0x42)),  // B
             ])
         )
 
@@ -98,11 +98,11 @@ struct ElementAlternationTests {
             name: "test",
             element: .alternation([
                 .terminal(.byte(0x41)),  // A
-                .terminal(.byte(0x42))   // B
+                .terminal(.byte(0x42)),  // B
             ])
         )
 
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x43], against: rule)  // C
         }
     }
@@ -116,7 +116,7 @@ struct ElementAlternationTests {
                 .terminal(.byteRange(0x30, 0x39)),  // 0-9
                 .terminal(.string("A")),
                 .terminal(.string("B")),
-                .terminal(.string("C"))
+                .terminal(.string("C")),
             ])
         )
 
@@ -157,7 +157,7 @@ struct ElementOptionalTests {
             element: .sequence([
                 .terminal(.byte(0x41)),  // A
                 .optional(.terminal(.byte(0x42))),  // [B]
-                .terminal(.byte(0x43))   // C
+                .terminal(.byte(0x43)),  // C
             ])
         )
 
@@ -207,7 +207,7 @@ struct ElementRepetitionTests {
             element: .repetition(.terminal(.byte(0x41)), min: 1, max: nil)
         )
 
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([], against: rule)
         }
     }
@@ -240,7 +240,7 @@ struct ElementRepetitionTests {
             element: .repetition(.terminal(.byte(0x41)), min: 2, max: 4)
         )
 
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x41], against: rule)  // Too few
         }
 
@@ -248,7 +248,7 @@ struct ElementRepetitionTests {
         try RFC_5234.Validator.validate([0x41, 0x41, 0x41], against: rule)  // 3 ✓
         try RFC_5234.Validator.validate([0x41, 0x41, 0x41, 0x41], against: rule)  // 4 ✓
 
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x41, 0x41, 0x41, 0x41, 0x41], against: rule)  // Too many
         }
     }
@@ -261,13 +261,13 @@ struct ElementRepetitionTests {
             element: .repetition(.terminal(.byte(0x41)), min: 3, max: 3)
         )
 
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x41, 0x41], against: rule)  // Too few
         }
 
         try RFC_5234.Validator.validate([0x41, 0x41, 0x41], against: rule)  // Exact ✓
 
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x41, 0x41, 0x41, 0x41], against: rule)  // Too many
         }
     }
@@ -283,12 +283,12 @@ struct ElementComplexTests {
             element: .sequence([
                 .alternation([
                     .terminal(.byte(0x41)),  // A
-                    .terminal(.byte(0x42))   // B
+                    .terminal(.byte(0x42)),  // B
                 ]),
                 .alternation([
                     .terminal(.byte(0x43)),  // C
-                    .terminal(.byte(0x44))   // D
-                ])
+                    .terminal(.byte(0x44)),  // D
+                ]),
             ])
         )
 
@@ -306,7 +306,7 @@ struct ElementComplexTests {
             element: .repetition(
                 .sequence([
                     .terminal(.byte(0x41)),  // A
-                    .terminal(.byte(0x42))   // B
+                    .terminal(.byte(0x42)),  // B
                 ]),
                 min: 0,
                 max: nil

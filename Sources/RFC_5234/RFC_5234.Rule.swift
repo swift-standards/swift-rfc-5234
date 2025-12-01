@@ -2,7 +2,7 @@ extension RFC_5234 {
     /// An ABNF rule definition.
     ///
     /// A rule consists of a name and an element that defines the pattern to match.
-    public struct Rule: Hashable, Sendable {
+    public struct Rule: Hashable, Sendable, Codable {
         /// The name of the rule
         public let name: String
 
@@ -28,7 +28,7 @@ extension RFC_5234 {
     /// An element in an ABNF rule.
     ///
     /// Elements can be terminals (actual matching patterns) or references to other rules.
-    public indirect enum Element: Hashable, Sendable {
+    public indirect enum Element: Hashable, Sendable, Codable {
         /// A terminal matching pattern
         case terminal(Terminal)
 

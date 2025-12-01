@@ -30,7 +30,7 @@ extension RFC_5234 {
             at offset: Int
         ) throws -> (matched: Bool, consumed: Int) {
             switch element {
-            case let .terminal(terminal):
+            case .terminal(let terminal):
                 // Try to match the terminal at the current position
                 var length = 1
                 while offset + length <= bytes.count {
@@ -43,7 +43,7 @@ extension RFC_5234 {
                 }
                 return (false, 0)
 
-            case let .sequence(elements):
+            case .sequence(let elements):
                 var totalConsumed = 0
                 for elem in elements {
                     let (matched, consumed) = try matchElement(
@@ -56,7 +56,7 @@ extension RFC_5234 {
                 }
                 return (true, totalConsumed)
 
-            case let .alternation(elements):
+            case .alternation(let elements):
                 for elem in elements {
                     let (matched, consumed) = try matchElement(elem, in: bytes, at: offset)
                     if matched {
@@ -65,11 +65,11 @@ extension RFC_5234 {
                 }
                 return (false, 0)
 
-            case let .optional(elem):
+            case .optional(let elem):
                 let (matched, consumed) = try matchElement(elem, in: bytes, at: offset)
                 return (true, matched ? consumed : 0)
 
-            case let .repetition(elem, min, max):
+            case .repetition(let elem, let min, let max):
                 var count = 0
                 var totalConsumed = 0
                 while true {
@@ -92,10 +92,27 @@ extension RFC_5234 {
         }
 
         /// Errors that can occur during validation.
-        public enum Error: Swift.Error, Sendable {
+        public enum Error: Swift.Error, Sendable, Equatable {
             case doesNotMatch(String)
             case incompleteMatch(String, consumed: Int, total: Int)
             case unsupportedFeature(String)
+        }
+
+        /// Deprecated: Use `Error` instead
+        @available(*, deprecated, renamed: "Error")
+        public typealias ValidationError = Error
+    }
+}
+
+extension RFC_5234.Validator.Error: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .doesNotMatch(let ruleName):
+            return "Input does not match rule '\(ruleName)'"
+        case .incompleteMatch(let ruleName, let consumed, let total):
+            return "Incomplete match for rule '\(ruleName)': consumed \(consumed) of \(total) bytes"
+        case .unsupportedFeature(let feature):
+            return "Unsupported feature: \(feature)"
         }
     }
 }

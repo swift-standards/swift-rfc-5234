@@ -24,7 +24,7 @@ struct CoreRulesCharacterClassTests {
 
     @Test("ALPHA rejects digits")
     func alphaRejectsDigits() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x30], against: RFC_5234.CoreRules.alpha)  // "0"
         }
     }
@@ -38,7 +38,7 @@ struct CoreRulesCharacterClassTests {
 
     @Test("DIGIT rejects letters")
     func digitRejectsLetters() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x41], against: RFC_5234.CoreRules.digit)  // "A"
         }
     }
@@ -66,7 +66,7 @@ struct CoreRulesCharacterClassTests {
 
     @Test("HEXDIG rejects G")
     func hexdigRejectsG() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x47], against: RFC_5234.CoreRules.hexdig)  // "G"
         }
     }
@@ -79,7 +79,7 @@ struct CoreRulesCharacterClassTests {
 
     @Test("BIT rejects 2")
     func bitRejects2() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x32], against: RFC_5234.CoreRules.bit)  // "2"
         }
     }
@@ -94,7 +94,7 @@ struct CoreRulesWhitespaceTests {
 
     @Test("SP rejects tab")
     func spRejectsTab() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x09], against: RFC_5234.CoreRules.sp)
         }
     }
@@ -121,14 +121,14 @@ struct CoreRulesWhitespaceTests {
 
     @Test("CRLF rejects just CR")
     func crlfRejectsCR() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x0D], against: RFC_5234.CoreRules.crlf)
         }
     }
 
     @Test("CRLF rejects just LF")
     func crlfRejectsLF() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x0A], against: RFC_5234.CoreRules.crlf)
         }
     }
@@ -145,7 +145,7 @@ struct CoreRulesWhitespaceTests {
 
     @Test("WSP rejects other whitespace")
     func wspRejectsOther() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x0A], against: RFC_5234.CoreRules.wsp)  // LF
         }
     }
@@ -160,7 +160,7 @@ struct CoreRulesPunctuationTests {
 
     @Test("DQUOTE rejects single quote")
     func dquoteRejectsSingleQuote() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x27], against: RFC_5234.CoreRules.dquote)
         }
     }
@@ -178,17 +178,17 @@ struct CoreRulesCharacterRangeTests {
 
     @Test("VCHAR rejects space")
     func vcharRejectsSpace() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x20], against: RFC_5234.CoreRules.vchar)
         }
     }
 
     @Test("VCHAR rejects control characters")
     func vcharRejectsControl() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x00], against: RFC_5234.CoreRules.vchar)
         }
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x1F], against: RFC_5234.CoreRules.vchar)
         }
     }
@@ -202,17 +202,17 @@ struct CoreRulesCharacterRangeTests {
 
     @Test("CHAR rejects NUL")
     func charRejectsNUL() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x00], against: RFC_5234.CoreRules.char)
         }
     }
 
     @Test("CHAR rejects 8-bit values")
     func charRejects8Bit() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x80], against: RFC_5234.CoreRules.char)
         }
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0xFF], against: RFC_5234.CoreRules.char)
         }
     }
@@ -227,10 +227,10 @@ struct CoreRulesCharacterRangeTests {
 
     @Test("CTL rejects printable characters")
     func ctlRejectsPrintable() {
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x20], against: RFC_5234.CoreRules.ctl)  // space
         }
-        #expect(throws: RFC_5234.Validator.ValidationError.self) {
+        #expect(throws: RFC_5234.Validator.Error.self) {
             try RFC_5234.Validator.validate([0x41], against: RFC_5234.CoreRules.ctl)  // A
         }
     }
@@ -252,7 +252,7 @@ struct CoreRulesLookupTests {
             "ALPHA", "DIGIT", "HEXDIG", "BIT",
             "SP", "HTAB", "CR", "LF", "CRLF", "WSP",
             "DQUOTE",
-            "VCHAR", "CHAR", "CTL", "OCTET"
+            "VCHAR", "CHAR", "CTL", "OCTET",
         ]
 
         for name in expectedNames {
