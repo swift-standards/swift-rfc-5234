@@ -6,7 +6,7 @@
 // These core rules delegate to INCITS-4-1986 for character classification
 // rather than reimplementing ASCII character classes.
 
-import INCITS_4_1986
+import ASCII
 
 extension RFC_5234 {
     /// Core ABNF rules defined in RFC 5234 Appendix B.1
