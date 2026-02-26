@@ -1,5 +1,4 @@
 import RFC_5234
-import Test_Primitives
 import Testing
 
 @Suite("RFC 5234 Basic Tests")
