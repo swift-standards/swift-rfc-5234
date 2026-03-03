@@ -10,7 +10,7 @@ extension RFC_5234 {
         public static func validate(
             _ bytes: [UInt8],
             against rule: Rule
-        ) throws {
+        ) throws(Error) {
             let (matched, consumed) = try matchElement(rule.element, in: bytes, at: 0)
             guard matched else {
                 throw Error.doesNotMatch(rule.name)
@@ -28,7 +28,7 @@ extension RFC_5234 {
             _ element: Element,
             in bytes: [UInt8],
             at offset: Int
-        ) throws -> (matched: Bool, consumed: Int) {
+        ) throws(Error) -> (matched: Bool, consumed: Int) {
             switch element {
             case .terminal(let terminal):
                 // Try to match the terminal at the current position
