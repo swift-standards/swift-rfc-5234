@@ -1,4 +1,4 @@
-import ASCII
+import ASCII_Primitives
 
 extension RFC_5234 {
     /// A terminal element in an ABNF grammar.
@@ -72,8 +72,8 @@ extension RFC_5234 {
                     return bytes == stringBytes
                 } else {
                     return zip(bytes, stringBytes).allSatisfy { byte, expected in
-                        let lower = INCITS_4_1986.CaseConversion.convert(byte, to: .lower)
-                        let expectedLower = INCITS_4_1986.CaseConversion.convert(
+                        let lower = ASCII.Case.Conversion.convert(byte, to: .lower)
+                        let expectedLower = ASCII.Case.Conversion.convert(
                             expected,
                             to: .lower
                         )

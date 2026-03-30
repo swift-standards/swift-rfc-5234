@@ -6,7 +6,7 @@
 // These core rules delegate to INCITS-4-1986 for character classification
 // rather than reimplementing ASCII character classes.
 
-import ASCII
+import ASCII_Primitives
 
 extension RFC_5234 {
     /// Core ABNF rules defined in RFC 5234 Appendix B.1
@@ -120,7 +120,7 @@ extension RFC_5234.CoreRules {
     /// Uses INCITS-4-1986 ControlCharacters.htab constant.
     public static let htab = RFC_5234.Rule(
         name: "HTAB",
-        element: .terminal(.byte(INCITS_4_1986.ControlCharacters.htab))
+        element: .terminal(.byte(INCITS_4_1986.Character.Control.htab))
     )
 
     /// CR = %x0D  ; carriage return
@@ -129,7 +129,7 @@ extension RFC_5234.CoreRules {
     /// Uses INCITS-4-1986 ControlCharacters.cr constant.
     public static let cr = RFC_5234.Rule(
         name: "CR",
-        element: .terminal(.byte(INCITS_4_1986.ControlCharacters.cr))
+        element: .terminal(.byte(INCITS_4_1986.Character.Control.cr))
     )
 
     /// LF = %x0A  ; linefeed
@@ -138,7 +138,7 @@ extension RFC_5234.CoreRules {
     /// Uses INCITS-4-1986 ControlCharacters.lf constant.
     public static let lf = RFC_5234.Rule(
         name: "LF",
-        element: .terminal(.byte(INCITS_4_1986.ControlCharacters.lf))
+        element: .terminal(.byte(INCITS_4_1986.Character.Control.lf))
     )
 
     /// CRLF = CR LF  ; Internet newline
@@ -148,8 +148,8 @@ extension RFC_5234.CoreRules {
     public static let crlf = RFC_5234.Rule(
         name: "CRLF",
         element: .sequence([
-            .terminal(.byte(INCITS_4_1986.ControlCharacters.cr)),
-            .terminal(.byte(INCITS_4_1986.ControlCharacters.lf)),
+            .terminal(.byte(INCITS_4_1986.Character.Control.cr)),
+            .terminal(.byte(INCITS_4_1986.Character.Control.lf)),
         ])
     )
 
@@ -161,7 +161,7 @@ extension RFC_5234.CoreRules {
         name: "WSP",
         element: .alternation([
             .terminal(.byte(INCITS_4_1986.SPACE.sp)),
-            .terminal(.byte(INCITS_4_1986.ControlCharacters.htab)),
+            .terminal(.byte(INCITS_4_1986.Character.Control.htab)),
         ])
     )
 }
@@ -175,7 +175,7 @@ extension RFC_5234.CoreRules {
     /// Uses INCITS-4-1986 GraphicCharacters.quotationMark constant.
     public static let dquote = RFC_5234.Rule(
         name: "DQUOTE",
-        element: .terminal(.byte(INCITS_4_1986.GraphicCharacters.quotationMark))
+        element: .terminal(.byte(INCITS_4_1986.Character.Graphic.quotationMark))
     )
 }
 
