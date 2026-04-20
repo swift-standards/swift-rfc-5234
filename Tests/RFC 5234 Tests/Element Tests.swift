@@ -8,8 +8,8 @@ import Testing
 
 @Suite("RFC_5234.Element - Sequence")
 struct ElementSequenceTests {
-    @Test("Sequence matches concatenated elements")
-    func sequenceMatches() throws {
+    @Test
+    func `Sequence matches concatenated elements`() throws {
         // "AB" = sequence of "A" then "B"
         let rule = RFC_5234.Rule(
             name: "test",
@@ -22,8 +22,8 @@ struct ElementSequenceTests {
         try RFC_5234.Validator.validate([0x41, 0x42], against: rule)
     }
 
-    @Test("Sequence rejects partial match")
-    func sequenceRejectsPartial() {
+    @Test
+    func `Sequence rejects partial match`() {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .sequence([
@@ -37,8 +37,8 @@ struct ElementSequenceTests {
         }
     }
 
-    @Test("Sequence rejects wrong order")
-    func sequenceRejectsWrongOrder() {
+    @Test
+    func `Sequence rejects wrong order`() {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .sequence([
@@ -52,8 +52,8 @@ struct ElementSequenceTests {
         }
     }
 
-    @Test("Empty sequence matches empty input")
-    func emptySequence() throws {
+    @Test
+    func `Empty sequence matches empty input`() throws {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .sequence([])
@@ -65,8 +65,8 @@ struct ElementSequenceTests {
 
 @Suite("RFC_5234.Element - Alternation")
 struct ElementAlternationTests {
-    @Test("Alternation matches first option")
-    func alternationMatchesFirst() throws {
+    @Test
+    func `Alternation matches first option`() throws {
         // "A" / "B"
         let rule = RFC_5234.Rule(
             name: "test",
@@ -79,8 +79,8 @@ struct ElementAlternationTests {
         try RFC_5234.Validator.validate([0x41], against: rule)
     }
 
-    @Test("Alternation matches second option")
-    func alternationMatchesSecond() throws {
+    @Test
+    func `Alternation matches second option`() throws {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .alternation([
@@ -92,8 +92,8 @@ struct ElementAlternationTests {
         try RFC_5234.Validator.validate([0x42], against: rule)
     }
 
-    @Test("Alternation rejects non-matching input")
-    func alternationRejectsNonMatching() {
+    @Test
+    func `Alternation rejects non-matching input`() {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .alternation([
@@ -107,8 +107,8 @@ struct ElementAlternationTests {
         }
     }
 
-    @Test("Alternation with many options")
-    func alternationManyOptions() throws {
+    @Test
+    func `Alternation with many options`() throws {
         // Test HEXDIG-like: 0-9 / A-F
         let rule = RFC_5234.Rule(
             name: "test",
@@ -128,8 +128,8 @@ struct ElementAlternationTests {
 
 @Suite("RFC_5234.Element - Optional")
 struct ElementOptionalTests {
-    @Test("Optional matches when present")
-    func optionalMatchesPresent() throws {
+    @Test
+    func `Optional matches when present`() throws {
         // [A]
         let rule = RFC_5234.Rule(
             name: "test",
@@ -139,8 +139,8 @@ struct ElementOptionalTests {
         try RFC_5234.Validator.validate([0x41], against: rule)
     }
 
-    @Test("Optional matches when absent")
-    func optionalMatchesAbsent() throws {
+    @Test
+    func `Optional matches when absent`() throws {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .optional(.terminal(.byte(0x41)))  // [A]
@@ -149,8 +149,8 @@ struct ElementOptionalTests {
         try RFC_5234.Validator.validate([], against: rule)
     }
 
-    @Test("Optional in sequence")
-    func optionalInSequence() throws {
+    @Test
+    func `Optional in sequence`() throws {
         // A [B] C
         let rule = RFC_5234.Rule(
             name: "test",
@@ -168,8 +168,8 @@ struct ElementOptionalTests {
 
 @Suite("RFC_5234.Element - Repetition")
 struct ElementRepetitionTests {
-    @Test("Repetition 0 or more (*) matches zero")
-    func repetitionZeroOrMore_Zero() throws {
+    @Test
+    func `Repetition 0 or more (*) matches zero`() throws {
         // *A
         let rule = RFC_5234.Rule(
             name: "test",
@@ -179,8 +179,8 @@ struct ElementRepetitionTests {
         try RFC_5234.Validator.validate([], against: rule)
     }
 
-    @Test("Repetition 0 or more (*) matches one")
-    func repetitionZeroOrMore_One() throws {
+    @Test
+    func `Repetition 0 or more (*) matches one`() throws {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .repetition(.terminal(.byte(0x41)), min: 0, max: nil)
@@ -189,8 +189,8 @@ struct ElementRepetitionTests {
         try RFC_5234.Validator.validate([0x41], against: rule)  // A
     }
 
-    @Test("Repetition 0 or more (*) matches many")
-    func repetitionZeroOrMore_Many() throws {
+    @Test
+    func `Repetition 0 or more (*) matches many`() throws {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .repetition(.terminal(.byte(0x41)), min: 0, max: nil)
@@ -199,8 +199,8 @@ struct ElementRepetitionTests {
         try RFC_5234.Validator.validate([0x41, 0x41, 0x41], against: rule)  // AAA
     }
 
-    @Test("Repetition 1 or more (1*) requires at least one")
-    func repetitionOneOrMore_RequiresOne() {
+    @Test
+    func `Repetition 1 or more (1*) requires at least one`() {
         // 1*A
         let rule = RFC_5234.Rule(
             name: "test",
@@ -212,8 +212,8 @@ struct ElementRepetitionTests {
         }
     }
 
-    @Test("Repetition 1 or more (1*) accepts one")
-    func repetitionOneOrMore_One() throws {
+    @Test
+    func `Repetition 1 or more (1*) accepts one`() throws {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .repetition(.terminal(.byte(0x41)), min: 1, max: nil)
@@ -222,8 +222,8 @@ struct ElementRepetitionTests {
         try RFC_5234.Validator.validate([0x41], against: rule)
     }
 
-    @Test("Repetition 1 or more (1*) accepts many")
-    func repetitionOneOrMore_Many() throws {
+    @Test
+    func `Repetition 1 or more (1*) accepts many`() throws {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .repetition(.terminal(.byte(0x41)), min: 1, max: nil)
@@ -232,8 +232,8 @@ struct ElementRepetitionTests {
         try RFC_5234.Validator.validate([0x41, 0x41], against: rule)
     }
 
-    @Test("Repetition with max (2*4)")
-    func repetitionWithMax() throws {
+    @Test
+    func `Repetition with max (2*4)`() throws {
         // 2*4A = 2 to 4 occurrences
         let rule = RFC_5234.Rule(
             name: "test",
@@ -253,8 +253,8 @@ struct ElementRepetitionTests {
         }
     }
 
-    @Test("Exact repetition (3A)")
-    func exactRepetition() throws {
+    @Test
+    func `Exact repetition (3A)`() throws {
         // 3A = exactly 3
         let rule = RFC_5234.Rule(
             name: "test",
@@ -275,8 +275,8 @@ struct ElementRepetitionTests {
 
 @Suite("RFC_5234.Element - Complex Combinations")
 struct ElementComplexTests {
-    @Test("Sequence of alternations")
-    func sequenceOfAlternations() throws {
+    @Test
+    func `Sequence of alternations`() throws {
         // (A / B) (C / D)
         let rule = RFC_5234.Rule(
             name: "test",
@@ -298,8 +298,8 @@ struct ElementComplexTests {
         try RFC_5234.Validator.validate([0x42, 0x44], against: rule)  // BD
     }
 
-    @Test("Repetition of sequence")
-    func repetitionOfSequence() throws {
+    @Test
+    func `Repetition of sequence`() throws {
         // *(AB)
         let rule = RFC_5234.Rule(
             name: "test",
@@ -318,8 +318,8 @@ struct ElementComplexTests {
         try RFC_5234.Validator.validate([0x41, 0x42, 0x41, 0x42], against: rule)  // ABAB
     }
 
-    @Test("Optional repetition")
-    func optionalRepetition() throws {
+    @Test
+    func `Optional repetition`() throws {
         // [*A]
         let rule = RFC_5234.Rule(
             name: "test",

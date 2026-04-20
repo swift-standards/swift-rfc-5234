@@ -3,8 +3,8 @@ import Testing
 
 @Suite("RFC 5234 Basic Tests")
 struct BasicTests {
-    @Test("Case-insensitive string matching")
-    func caseInsensitiveString() throws {
+    @Test
+    func `Case-insensitive string matching`() throws {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .terminal(.string("abc"))
@@ -16,8 +16,8 @@ struct BasicTests {
         try RFC_5234.Validator.validate([0x41, 0x62, 0x43], against: rule)  // "AbC"
     }
 
-    @Test("Byte value matching")
-    func byteValue() throws {
+    @Test
+    func `Byte value matching`() throws {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .terminal(.byte(0x41))  // 'A'
@@ -26,8 +26,8 @@ struct BasicTests {
         try RFC_5234.Validator.validate([0x41], against: rule)
     }
 
-    @Test("Byte range matching")
-    func byteRange() throws {
+    @Test
+    func `Byte range matching`() throws {
         let rule = RFC_5234.Rule(
             name: "test",
             element: .terminal(.byteRange(0x41, 0x5A))  // 'A'-'Z'
