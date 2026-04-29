@@ -1,0 +1,10 @@
+# .github/metadata.yaml
+# Triaged by AI-assisted bulk pass (2026-04-29).
+description: "Swift implementation of RFC 5234: Augmented BNF for Syntax Specifications: ABNF."
+topics:
+  - standards
+  - rfc
+  - rfc-5234
+  - parsing
+  - abnf
+homepage: "https://swift-institute.org"
